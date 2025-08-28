@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import ProductCard from '../components/ProductCard';
 import TestimonialCard from '../components/TestimonialCard';
@@ -10,8 +10,23 @@ import { PRODUCTS, TESTIMONIALS } from '../constants';
 const HomePage: React.FC = () => {
   const featuredProducts = PRODUCTS.slice(0, 4);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
+  };
+
   return (
-    <div className="space-y-24 pb-24">
+    <div className="space-y-24 pb-24 overflow-x-hidden">
       {/* Hero Section */}
       <section className="relative h-[60vh] md:h-[80vh] flex items-center justify-center text-center text-white bg-gray-800">
         <img
@@ -20,31 +35,60 @@ const HomePage: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover opacity-50"
         />
         <div className="relative z-10 p-6">
-          <h1 className="text-5xl md:text-7xl font-bold font-serif leading-tight">Wear Your Story</h1>
-          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto">Premium quality t-shirts with designs that speak volumes.</p>
-          <Link to="/shop">
-            <Button className="mt-8 text-lg">Shop New Arrivals</Button>
-          </Link>
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold font-serif leading-tight"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+          >
+            Wear Your Story
+          </motion.h1>
+          <motion.p 
+            className="mt-4 text-lg md:text-xl max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Premium quality t-shirts with designs that speak volumes.
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
+            <Link to="/shop">
+              <Button className="mt-8 text-lg">Shop New Arrivals</Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
       {/* Featured Products Section */}
-      <section className="container mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center mb-12 font-serif">Featured Collections</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <motion.section 
+        className="container mx-auto px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <motion.h2 variants={itemVariants} className="text-3xl font-bold text-center mb-12 font-serif">Featured Collections</motion.h2>
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={containerVariants}
+        >
           {featuredProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+            <motion.div key={product.id} variants={itemVariants}>
+              <ProductCard product={product} />
+            </motion.div>
           ))}
-        </div>
-        <div className="text-center mt-12">
+        </motion.div>
+        <motion.div className="text-center mt-12" variants={itemVariants}>
             <Link to="/shop">
                 <Button variant="secondary">View All Products</Button>
             </Link>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* About Us Snippet */}
-      <section className="bg-white">
+      <motion.section 
+        className="bg-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="container mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
             <div>
                 <img src="https://picsum.photos/id/160/600/400" alt="Our brand" className="rounded-lg shadow-xl" />
@@ -59,18 +103,29 @@ const HomePage: React.FC = () => {
                 </Link>
             </div>
         </div>
-      </section>
+      </motion.section>
 
 
       {/* Testimonials Section */}
-      <section className="container mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center mb-12 font-serif">What Our Customers Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <motion.section 
+        className="container mx-auto px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariants}
+      >
+        <motion.h2 variants={itemVariants} className="text-3xl font-bold text-center mb-12 font-serif">What Our Customers Say</motion.h2>
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={containerVariants}
+        >
           {TESTIMONIALS.map((testimonial, index) => (
-            <TestimonialCard key={index} testimonial={testimonial} />
+            <motion.div key={index} variants={itemVariants}>
+              <TestimonialCard testimonial={testimonial} />
+            </motion.div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
       
       {/* Newsletter Section */}
       <NewsletterSignup />
