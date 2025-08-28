@@ -1,11 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// Fix: Changed ButtonProps from an interface extending React.ButtonHTMLAttributes to a type
+// using React.ComponentProps<typeof motion.button>. This correctly inherits all props
+// from the motion.button component, including motion-specific props and their correct types,
+// resolving type conflicts for properties like `onAnimationStart`.
+type ButtonProps = React.ComponentProps<typeof motion.button> & {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary';
-  className?: string;
-}
+};
 
 const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className = '', ...props }) => {
   const baseStyles = 'px-6 py-3 font-semibold rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
